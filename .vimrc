@@ -10,17 +10,17 @@ Plugin 'nvie/vim-flake8'
 " show file tree
 Plugin 'scrooloose/nerdtree'
 " fuzzy file matching
-Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'ctrlpvim/ctrlp.vim'
 " autocomplete for python
 Plugin 'Valloric/YouCompleteMe'
 " Buffer explorer
-Plugin 'jlanzarotta/bufexplorer'
+" Plugin 'jlanzarotta/bufexplorer'
 " Grep within vim
 Plugin 'mhinz/vim-grepper'
 " Tmux within vim
-Plugin 'benmills/vimux'
+" Plugin 'benmills/vimux'
 " defines helper methods for vimux and nosetest bindings
-Plugin 'pitluga/vimux-nose-test'
+" Plugin 'pitluga/vimux-nose-test'
 " class outlines viewer
 Plugin 'majutsushi/tagbar'
 " Git plugin
@@ -29,10 +29,19 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'w0rp/ale'
 " fuzzy finding using fzf
 " remains a TODO
-" Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf'
 Plugin 'darshanM/py_vimux'
+" Test Opening in Github
+Plugin 'file:///Users/dmarkandaiah/workbench/vim_scripts/gitview'
+" Black
+Plugin 'psf/black'
 
 call vundle#end() 
+
+" Ctrl-y for Git View
+nmap <C-y> <esc>:ViewFileGithub<cr>
+
 filetype plugin indent on
 
 syntax enable
@@ -79,9 +88,7 @@ map <Leader>nf :NERDTreeFind<CR>
 " open Nerdtree on Leader t
 map <Leader>t :TagbarToggle<CR>
 
-" open ctrlP on ctrl....p
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+map <C-p> <esc>:Files<CR>
 
 " When invoked without an explicit starting directory, CtrlP will set its local working directory according to this variable
 let g:ctrlp_working_path_mode = 'ra'
@@ -90,11 +97,14 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 " CTRL+l opens the buffer list using bufexplorer
-map <C-l> <esc>:BufExplorer<cr>
+map <C-l> <esc>:Buffers<cr>
 
 " Ctrl-w + m maximizes windows
 nmap <C-W>m <C-W>\|
 " Ctrl-w + = equalizes them back
+
+" Ctrl-x kills all buffers
+nmap <C-x> <esc>:bufdo bd<cr>
 
 " I want to exclude files from gitgrep, but havent got this
 " working yet :\
@@ -125,20 +135,8 @@ let g:ale_python_flake8_options = '--ignore=E501,E402'
 
 " for clear white space leader+c+w
 
-" vimuxy things
-let g:vimux_nose_setup_cmd="echo 'run tests here'"
-let g:vimux_nose_options="--nologcapture"
-" map <Leader>rs :call VagrantSsh()<CR>
-" replacing with py_vimux
 
 map <Leader>rs :CreateTmuxPane<CR>
-
-let g:vimux_nose_options="--nologcapture"
-" map <Leader>rd :call CdAppRoot()<CR>
-" map <Leader>ri :call VimuxInspectRunner()<CR>
-" map <Leader>rc :call VimuxCloseRunner()<CR>
-map <Leader>rr :call VimuxRunLastCommand()<CR>
-
 autocmd FileType python map <Leader>ra :RunFile<CR>
 autocmd FileType python map <Leader>rF :RunClass<CR>
 autocmd FileType python map <Leader>rf :RunTest<CR>
@@ -147,13 +145,11 @@ autocmd FileType python map <Leader>rf :RunTest<CR>
 " path here - brew install ctags-exuberant
 let g:Tlist_Ctags_Cmd='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 
-let g:setup_test_runner_cmd=''
+
+" PyVimux Configurations
+let g:test_runner = 'py.test'
 let g:setup_cmd='vagrant ssh;'
+let g:test_runner_options = '-s'
 
-:function VagrantSsh()
-: call VimuxRunCommand('vagrant ssh') 
-:endfunction
-
-:function CdAppRoot()
-: call VimuxRunCommand('cd $APPROOT') 
-:endfunction
+" Stop the annoying vim beeps
+set belloff=all
